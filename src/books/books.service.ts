@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import Book from './Books';
+import Book from './books.model';
 
 @Injectable()
 export class BooksService {
