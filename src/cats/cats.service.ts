@@ -17,5 +17,3 @@ export class CatsService {
     return this.cats.find((c) => c.id === id);
   }
 }
-
-export default CatsService;
