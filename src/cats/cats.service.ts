@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import Cat from 'src/models/Cat';
 
 @Injectable()
 export class CatsService {
   private readonly cats: Cat[] = [
-    { id: 1, name: 'Meow' },
-    { id: 2, name: 'Meow 2' },
-    { id: 3, name: 'Meow 3' },
+    {id: 1, name: 'Meow'},
+    {id: 2, name: 'Meow 2'},
+    {id: 3, name: 'Meow 3'},
   ];
 
   getAll() {
@@ -17,3 +17,5 @@ export class CatsService {
     return this.cats.find((c) => c.id === id);
   }
 }
+
+export default CatsService;
