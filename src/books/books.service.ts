@@ -1,5 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import Book from './books.model';
+import {CreateBookDto, UpdateBookDto} from './books.dto';
 
 interface BookQuery {
   genre: string;
@@ -28,11 +29,11 @@ export class BooksService {
     return this.books.find((book) => book.id === id);
   }
 
-  create(book: Book) {
-    this.books.push({id: this.books.length + 1, ...book});
+  create(book: CreateBookDto) {
+    return this.books.push({id: this.books.length + 1, ...book});
   }
 
-  update(id: number, book: Book) {
+  update(id: number, book: UpdateBookDto) {
     const index = this.books.findIndex((book) => book.id === id);
     this.books[index] = {...this.books[index], ...book};
 
