@@ -29,16 +29,16 @@ export class BooksController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createBookDto: CreateBookDto) {
-    this.service.create(createBookDto);
+  create(@Body() book: CreateBookDto) {
+    this.service.create(book);
   }
 
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateBookDto: UpdateBookDto,
+    @Body() book: UpdateBookDto,
   ) {
-    return this.service.update(id, updateBookDto);
+    return this.service.update(id, book);
   }
 
   @Delete(':id')
