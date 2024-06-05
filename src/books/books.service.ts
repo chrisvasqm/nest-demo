@@ -1,6 +1,6 @@
-import {Injectable} from '@nestjs/common';
-import Book from './books.model';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {CreateBookDto, UpdateBookDto} from './books.dto';
+import Book from './books.model';
 
 interface BookQuery {
   genre: string;
@@ -26,7 +26,10 @@ export class BooksService {
   }
 
   find(id: number) {
-    return this.books.find((book) => book.id === id);
+    const book = this.books.find((b) => b.id === id);
+    if (!book) throw new NotFoundException();
+
+    return book;
   }
 
   create(book: CreateBookDto) {
@@ -35,6 +38,8 @@ export class BooksService {
 
   update(id: number, book: UpdateBookDto) {
     const index = this.books.findIndex((book) => book.id === id);
+    if (index === -1) throw new NotFoundException();
+
     this.books[index] = {...this.books[index], ...book};
 
     return this.books[index];
@@ -42,7 +47,7 @@ export class BooksService {
 
   delete(id: number) {
     const deletedBook = this.find(id);
-    this.books = this.books.filter((book) => book.id !== id);
+    this.books = this.books.filter((book) => book.id !== deletedBook.id);
 
     return deletedBook;
   }

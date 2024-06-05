@@ -5,8 +5,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -23,14 +23,8 @@ export class BooksController {
   }
 
   @Get(':id')
-  find(@Param('id') id: string) {
-    const bookId = parseInt(id);
-    if (isNaN(bookId)) throw new NotFoundException();
-
-    const book = this.service.find(bookId);
-    if (!book) throw new NotFoundException();
-
-    return book;
+  find(@Param('id', ParseIntPipe) id: number) {
+    return this.service.find(id);
   }
 
   @Post()
@@ -40,24 +34,15 @@ export class BooksController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    const bookId = parseInt(id);
-    if (isNaN(bookId)) throw new NotFoundException();
-
-    const existingBook = this.service.find(bookId);
-    if (!existingBook) throw new NotFoundException();
-
-    return this.service.update(bookId, updateBookDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateBookDto: UpdateBookDto,
+  ) {
+    return this.service.update(id, updateBookDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    const bookId = parseInt(id);
-    if (isNaN(bookId)) throw new NotFoundException();
-
-    const book = this.service.find(bookId);
-    if (!book) throw new NotFoundException();
-
-    return this.service.delete(bookId);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.service.delete(id);
   }
 }
