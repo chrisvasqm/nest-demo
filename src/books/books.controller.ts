@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Res} from '@nestjs/common';
+import {Controller, Get, Param, Query, Res} from '@nestjs/common';
 import {BooksService} from './books.service';
 import {Response} from 'express';
 
@@ -7,8 +7,8 @@ export class BooksController {
   constructor(private readonly service: BooksService) {}
 
   @Get()
-  getAll(@Res() response: Response) {
-    response.send(this.service.getAll());
+  getAll(@Res() response: Response, @Query('genre') genre?: string) {
+    response.send(this.service.getAll({genre}));
   }
 
   @Get(':id')
