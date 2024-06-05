@@ -7,7 +7,7 @@ interface BookQuery {
 
 @Injectable()
 export class BooksService {
-  private readonly books: Book[] = [
+  private books: Book[] = [
     {id: 1, name: 'Clean Code', genre: 'Software'},
     {id: 2, name: 'Art of War', genre: 'Philosophy'},
     {id: 3, name: 'Pragmatic Programmer', genre: 'Software'},
@@ -26,5 +26,9 @@ export class BooksService {
 
   find(id: number) {
     return this.books.find((book) => book.id === id);
+  }
+
+  create(book: Book) {
+    this.books.push({id: this.books.length + 1, ...book});
   }
 }
