@@ -12,11 +12,11 @@ export class BooksController {
   }
 
   @Get(':id')
-  find(@Res() response: Response, @Param() params) {
-    const id = parseInt(params.id);
-    if (isNaN(id)) return response.status(404).send('Book not found');
+  find(@Res() response: Response, @Param('id') id: string) {
+    const bookId = parseInt(id);
+    if (isNaN(bookId)) return response.status(404).send('Book not found');
 
-    const book = this.service.find(id);
+    const book = this.service.find(bookId);
     if (!book) return response.status(404).send('Book not found');
 
     response.send(book);
