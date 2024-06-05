@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -54,5 +55,18 @@ export class BooksController {
     const updatedBook = this.service.update(bookId, book);
 
     return response.send(updatedBook);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string, @Res() response: Response) {
+    const bookId = parseInt(id);
+    if (isNaN(bookId)) return response.status(404).send('Book not found');
+
+    const book = this.service.find(bookId);
+    if (!book) return response.status(404).send('Book not found');
+
+    const deletedBook = this.service.delete(bookId);
+
+    response.send(deletedBook);
   }
 }

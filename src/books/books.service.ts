@@ -38,4 +38,11 @@ export class BooksService {
 
     return this.books[index];
   }
+
+  delete(id: number) {
+    const deletedBook = this.find(id);
+    this.books = this.books.filter((book) => book.id !== id);
+
+    return deletedBook;
+  }
 }
