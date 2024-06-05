@@ -31,4 +31,11 @@ export class BooksService {
   create(book: Book) {
     this.books.push({id: this.books.length + 1, ...book});
   }
+
+  update(id: number, book: Book) {
+    const index = this.books.findIndex((book) => book.id === id);
+    this.books[index] = {...this.books[index], ...book};
+
+    return this.books[index];
+  }
 }
