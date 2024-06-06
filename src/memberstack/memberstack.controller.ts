@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Res,
-} from '@nestjs/common';
-import {Response} from 'express';
+import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import {CreateMemberDto, UpdateMemberDto} from './memberstack.dto';
 import {MemberstackService} from './memberstack.service';
 
@@ -17,8 +7,8 @@ export class MemberstackController {
   constructor(private readonly service: MemberstackService) {}
 
   @Get()
-  async getAll(@Res() response: Response) {
-    response.send(await this.service.getAll());
+  async getAll() {
+    return this.service.getAll();
   }
 
   @Get(':id')
