@@ -1,13 +1,25 @@
 services:
-  postgres:
+  database:
     image: postgres:16.3-alpine3.20
-    container_name: nest-demo
+    container_name: database-nest-demo
     ports:
       - '5432:5432'
     environment:
       POSTGRES_DB: nest-demo
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: nest-backend
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@database:5432/nest-demo
+    depends_on:
+      - database
 
 volumes:
-  postgres_data:
+  database_data:
