@@ -28,18 +28,26 @@ export class MemberstackService {
 
     if (foundMember) throw new BadRequestException('Email already taken');
 
-    return memberstack.members.create({
+    const {data: createdMember} = await memberstack.members.create({
       email: member.email,
       password: member.password,
     });
+
+    return createdMember;
   }
 
-  update(id: string, member: UpdateMemberDto) {
-    return memberstack.members.update({id: id, data: member});
+  async update(id: string, member: UpdateMemberDto) {
+    const {data: updatedMember} = await memberstack.members.update({
+      id: id,
+      data: member,
+    });
+
+    return updatedMember;
   }
 
   async delete(id: string) {
     const {data: member} = await memberstack.members.delete({id});
+
     return member;
   }
 }
