@@ -2,7 +2,6 @@ import 'dotenv/config';
 import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
 import helmet from 'helmet';
-import handleUncaughtErrors from './eventHandlers/uncaughtErrors';
 import {ValidationPipe} from '@nestjs/common';
 
 async function bootstrap() {
@@ -18,8 +17,6 @@ async function bootstrap() {
       transform: true, // Automatically transforms payloads to be objects typed according to their DTO classes
     }),
   );
-
-  handleUncaughtErrors();
 
   const port = process.env.PORT || 3000;
   await app.listen(port, () =>
