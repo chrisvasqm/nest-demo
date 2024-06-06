@@ -10,3 +10,9 @@ export class CreateMemberDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class UpdateMemberDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+}

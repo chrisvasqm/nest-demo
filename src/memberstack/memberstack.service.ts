@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {CreateMemberDto} from './memberstack.dto';
+import {CreateMemberDto, UpdateMemberDto} from './memberstack.dto';
 
 const memberstack = admin.init(process.env.MEMBERSTACK_TEST_SECRET_KEY);
 
@@ -32,5 +32,9 @@ export class MemberstackService {
       email: member.email,
       password: member.password,
     });
+  }
+
+  update(id: string, member: UpdateMemberDto) {
+    return memberstack.members.update({id: id, data: member});
   }
 }
