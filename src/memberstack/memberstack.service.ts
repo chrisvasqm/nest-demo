@@ -50,4 +50,15 @@ export class MemberstackService {
 
     return member;
   }
+
+  async decode(token: string): Promise<any> {
+    if (!token) throw new BadRequestException('token is required');
+
+    try {
+      const decoded = await memberstack.verifyToken({token: token});
+      return decoded;
+    } catch (error) {
+      throw new BadRequestException('Invalid token');
+    }
+  }
 }

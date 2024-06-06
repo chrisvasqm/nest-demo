@@ -32,4 +32,9 @@ export class MemberstackController {
   async delete(@Param('id') id: string) {
     return this.service.delete(id);
   }
+
+  @Post('/decode')
+  decode(@Body('token') token: string) {
+    return this.service.decode(token);
+  }
 }
