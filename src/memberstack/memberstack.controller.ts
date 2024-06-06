@@ -13,20 +13,12 @@ export class MemberstackController {
   }
 
   @Get(':id')
-  async find(@Param('id') id: string, @Res() response: Response) {
-    const {data: member} = await this.service.find(id);
-    if (!member) response.status(404).send('Member not found');
-
-    response.send(member);
+  async find(@Param('id') id: string) {
+    return this.service.find(id);
   }
 
   @Post()
-  async create(@Res() response: Response, @Body() member: CreateMemberDto) {
-    const {data: existingMember} = await this.service.find(member.email);
-    if (existingMember) return response.status(400).send('Email already taken');
-
-    const createdMember = await this.service.create(member);
-
-    response.status(201).send(createdMember);
+  async create(@Body() member: CreateMemberDto) {
+    return this.service.create(member);
   }
 }
