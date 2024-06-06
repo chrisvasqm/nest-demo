@@ -37,4 +37,9 @@ export class MemberstackService {
   update(id: string, member: UpdateMemberDto) {
     return memberstack.members.update({id: id, data: member});
   }
+
+  async delete(id: string) {
+    const {data: member} = await memberstack.members.delete({id});
+    return member;
+  }
 }

@@ -1,4 +1,13 @@
-import {Body, Controller, Get, Param, Post, Put, Res} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common';
 import {Response} from 'express';
 import {CreateMemberDto, UpdateMemberDto} from './memberstack.dto';
 import {MemberstackService} from './memberstack.service';
@@ -27,5 +36,10 @@ export class MemberstackController {
     this.service.find(id);
 
     return this.service.update(id, member);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return this.service.delete(id);
   }
 }
