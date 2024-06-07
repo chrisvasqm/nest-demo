@@ -19,7 +19,7 @@ import { MemberstackService } from './memberstack/memberstack.service';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV !== 'production',
+      synchronize: true,
       ssl: process.env.NODE_ENV === 'production'
           ? { rejectUnauthorized: false }
           : false,
