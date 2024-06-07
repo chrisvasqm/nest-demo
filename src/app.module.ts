@@ -20,6 +20,9 @@ import { MemberstackService } from './memberstack/memberstack.service';
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== 'production',
+      ssl: process.env.NODE_ENV === 'production'
+          ? { rejectUnauthorized: false }
+          : false,
     }),
     BooksModule,
     EmailModule
