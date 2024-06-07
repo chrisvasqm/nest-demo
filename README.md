@@ -20,16 +20,3 @@ $ pnpm dev
 # production mode
 $ pnpm prod
 ```
-
-## Test
-
-```bash
-# unit tests
-$ pnpm test
-
-# e2e tests
-$ pnpm test:e2e
-
-# test coverage
-$ pnpm test:cov
-```
