@@ -11,15 +11,15 @@ services:
     volumes:
       - database_data:/var/lib/postgresql/data
 
-  backend:
-    build: .
-    container_name: backend
-    ports:
-      - '3000:3000'
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@database:5432/nest-demo
-    depends_on:
-      - database
+  # backend:
+  #   build: .
+  #   container_name: backend
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     DATABASE_URL: postgres://postgres:postgres@database:5432/nest-demo
+  #   depends_on:
+  #     - database
 
 volumes:
   database_data:
