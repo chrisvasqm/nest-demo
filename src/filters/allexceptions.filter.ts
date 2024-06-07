@@ -5,6 +5,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import {Request, Response} from 'express';
+import {logger} from '../logger/winston.logger';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -15,11 +16,28 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const status =
       exception instanceof HttpException ? exception.getStatus() : 500;
 
-    response.status(status).json({
+    const errorResponse = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
       message: exception.message || 'Internal server error',
+    };
+
+    // Log the exception using Winston
+    logger.error(`HTTP ${status} ${request.method} ${request.url}`, {
+      exception: {
+        message: exception.message,
+        stack: exception.stack,
+      },
+      request: {
+        headers: request.headers,
+        body: request.body,
+        params: request.params,
+        query: request.query,
+      },
+      response: errorResponse,
     });
+
+    response.status(status).json(errorResponse);
   }
 }
