@@ -1,54 +1,41 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
-import {CreateBookDto, UpdateBookDto} from './books.dto';
-import Book from './books.model';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
+import { CreateBookDto, UpdateBookDto } from './books.dto';
+import { Book } from './books.entity';
 
 interface BookQuery {
-  genre: string;
+  genre?: string;
 }
 
 @Injectable()
 export class BooksService {
-  private books: Book[] = [
-    {id: 1, name: 'Clean Code', genre: 'Software'},
-    {id: 2, name: 'Art of War', genre: 'Philosophy'},
-    {id: 3, name: 'Pragmatic Programmer', genre: 'Software'},
-  ];
+  constructor(@InjectEntityManager() private manager: EntityManager) { }
 
-  getAll(query?: BookQuery) {
-    const {genre} = query;
+  async getAll(query?: BookQuery) {
+    if (query && query.genre)
+      return await this.manager.find(Book, { where: { genre: query.genre } });
 
-    if (genre)
-      return this.books.filter((book) =>
-        book.genre.toLowerCase().includes(genre.toLowerCase()),
-      );
-
-    return this.books;
+    return await this.manager.find(Book);
   }
 
-  find(id: number) {
-    const book = this.books.find((b) => b.id === id);
+  async find(id: number) {
+    const book = await this.manager.findOne(Book, { where: { id } });
     if (!book) throw new NotFoundException();
-
     return book;
   }
 
-  create(book: CreateBookDto) {
-    return this.books.push({id: this.books.length + 1, ...book});
+  async create(book: CreateBookDto) {
+    const newBook = this.manager.create(Book, book);
+    return await this.manager.save(newBook);
   }
 
-  update(id: number, book: UpdateBookDto) {
-    const index = this.books.findIndex((book) => book.id === id);
-    if (index === -1) throw new NotFoundException();
-
-    this.books[index] = {...this.books[index], ...book};
-
-    return this.books[index];
+  async update(id: number, book: UpdateBookDto) {
+    await this.manager.update(Book, { id }, book);
+    return await this.find(id);
   }
 
-  delete(id: number) {
-    const deletedBook = this.find(id);
-    this.books = this.books.filter((book) => book.id !== deletedBook.id);
-
-    return deletedBook;
+  async delete(id: number) {
+    await this.manager.delete(Book, { id });
   }
 }

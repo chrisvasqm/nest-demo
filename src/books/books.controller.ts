@@ -9,17 +9,17 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Query,
+  Query
 } from '@nestjs/common';
-import {CreateBookDto, UpdateBookDto} from './books.dto';
-import {BooksService} from './books.service';
+import { CreateBookDto, UpdateBookDto } from './books.dto';
+import { BooksService } from './books.service';
 @Controller('/api/books')
 export class BooksController {
-  constructor(private readonly service: BooksService) {}
+  constructor(private readonly service: BooksService) { }
 
   @Get()
-  async getAll(@Query('genre') genre?: string) {
-    return this.service.getAll({genre});
+  getAll(@Query('genre') genre?: string) {
+    return this.service.getAll({ genre });
   }
 
   @Get(':id')
@@ -30,14 +30,11 @@ export class BooksController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() book: CreateBookDto) {
-    this.service.create(book);
+    return this.service.create(book);
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() book: UpdateBookDto,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() book: UpdateBookDto) {
     return this.service.update(id, book);
   }
 
