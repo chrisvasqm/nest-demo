@@ -41,6 +41,7 @@ export class BooksController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Creates a new Book' })
   @ApiResponse({ status: 201, type: Book })
+  @ApiResponse({ status: 400, description: 'Bad request' })
   create(@Body() book: CreateBookDto) {
     return this.service.create(book);
   }
@@ -48,6 +49,7 @@ export class BooksController {
   @Put(':id')
   @ApiOperation({ summary: 'Updates a Book by their id' })
   @ApiResponse({ status: 200, type: Book })
+  @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 404, description: 'Not found' })
   update(@Param('id', ParseIntPipe) id: number, @Body() book: UpdateBookDto) {
     return this.service.update(id, book);
@@ -56,6 +58,7 @@ export class BooksController {
   @Delete(':id')
   @ApiOperation({ summary: 'Deletes a Book by their id' })
   @ApiResponse({ status: 200, type: Book })
+  @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 404, description: 'Not found' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.service.delete(id);
