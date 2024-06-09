@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { MemberstackService } from 'src/memberstack/memberstack.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthenticationGuard implements CanActivate {
 
   constructor(private readonly service: MemberstackService) { }
 

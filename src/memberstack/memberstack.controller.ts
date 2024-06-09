@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nes
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateMemberDto, UpdateMemberDto } from './memberstack.dto';
 import { MemberstackService } from './memberstack.service';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthenticationGuard } from 'src/guards/auth.guard';
 
 @ApiTags('Memberstack')
 @Controller('/api/memberstack')
@@ -10,7 +10,7 @@ export class MemberstackController {
   constructor(private readonly service: MemberstackService) { }
 
   @Get()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthenticationGuard)
   @ApiOperation({ summary: 'Get all Members' })
   async getAll() {
     return this.service.getAll();
