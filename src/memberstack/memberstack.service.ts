@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {CreateMemberDto, UpdateMemberDto} from './memberstack.dto';
+import { CreateMemberDto, UpdateMemberDto } from './memberstack.dto';
 
 const memberstack = admin.init(process.env.MEMBERSTACK_TEST_SECRET_KEY);
 
@@ -15,20 +15,20 @@ export class MemberstackService {
   }
 
   async find(id: string) {
-    const {data: member} = await memberstack.members.retrieve({id});
+    const { data: member } = await memberstack.members.retrieve({ id });
     if (!member) throw new NotFoundException();
 
     return member;
   }
 
   async create(member: CreateMemberDto) {
-    const {data: foundMember} = await memberstack.members.retrieve({
+    const { data: foundMember } = await memberstack.members.retrieve({
       id: member.email,
     });
 
     if (foundMember) throw new BadRequestException('Email already taken');
 
-    const {data: createdMember} = await memberstack.members.create({
+    const { data: createdMember } = await memberstack.members.create({
       email: member.email,
       password: member.password,
     });
@@ -37,7 +37,7 @@ export class MemberstackService {
   }
 
   async update(id: string, member: UpdateMemberDto) {
-    const {data: updatedMember} = await memberstack.members.update({
+    const { data: updatedMember } = await memberstack.members.update({
       id: id,
       data: member,
     });
@@ -46,7 +46,7 @@ export class MemberstackService {
   }
 
   async delete(id: string) {
-    const {data: member} = await memberstack.members.delete({id});
+    const { data: member } = await memberstack.members.delete({ id });
 
     return member;
   }
@@ -55,8 +55,19 @@ export class MemberstackService {
     if (!token) throw new BadRequestException('token is required');
 
     try {
-      const decoded = await memberstack.verifyToken({token: token});
+      const decoded = await memberstack.verifyToken({ token: token });
       return decoded;
+    } catch (error) {
+      throw new BadRequestException('Invalid token');
+    }
+  }
+
+  async verify(token: string) {
+    if (!token) throw new BadRequestException('token is required');
+
+    try {
+      const isValid = await memberstack.verifyToken({ token: token });
+      return !!isValid;
     } catch (error) {
       throw new BadRequestException('Invalid token');
     }
