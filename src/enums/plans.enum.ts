@@ -1,4 +1,5 @@
 export enum Plans {
   CUSTOMER = 'Customer',
-  PROVIDER = "Provider"
+  PROVIDER = "Provider",
+  ADMIN = 'Admin'
 }
