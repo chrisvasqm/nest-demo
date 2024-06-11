@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
-import { AllExceptionsFilter } from './filters/allexceptions.filter';
+import { ServerExceptionsFilter } from './filters/serverexceptions.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -20,7 +20,7 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new ServerExceptionsFilter());
 
   const config = new DocumentBuilder()
     .setTitle('Nest Demo API')
