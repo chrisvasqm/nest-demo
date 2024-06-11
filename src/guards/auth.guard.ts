@@ -1,8 +1,8 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { MemberstackService } from 'src/memberstack/memberstack.service';
+import { DecodedMember, MemberstackService } from 'src/memberstack/memberstack.service';
 
 @Injectable()
-export class AuthenticationGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
 
   constructor(private readonly service: MemberstackService) { }
 
@@ -14,10 +14,16 @@ export class AuthenticationGuard implements CanActivate {
       throw new UnauthorizedException('Authorization header missing');
 
     const token = authorization.split(' ')[1];
-
     if (!token)
       throw new UnauthorizedException('Invalid authorization header format');
 
-    return this.service.verify(token)
+    const user = await this.service.decode(token) as DecodedMember;
+    if (!user)
+      throw new UnauthorizedException('Invalid token');
+
+    request.user = await this.service.find(user.id);
+
+    return true;
   }
 }
+

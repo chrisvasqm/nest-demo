@@ -3,6 +3,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateMemberDto, UpdateMemberDto } from './memberstack.dto';
 
@@ -58,18 +59,18 @@ export class MemberstackService {
       const decoded = await memberstack.verifyToken({ token: token });
       return decoded;
     } catch (error) {
-      throw new BadRequestException('Invalid token');
+      throw new UnauthorizedException('Invalid token');
     }
   }
+}
 
-  async verify(token: string) {
-    if (!token) throw new BadRequestException('token is required');
+export interface DecodedMember {
+  id: string,
+  planConnections: DecodedPlan[]
+}
 
-    try {
-      const isValid = await memberstack.verifyToken({ token: token });
-      return !!isValid;
-    } catch (error) {
-      throw new BadRequestException('Invalid token');
-    }
-  }
+interface DecodedPlan {
+  id: string,
+  active: boolean,
+  planName: string
 }

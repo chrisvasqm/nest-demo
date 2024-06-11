@@ -1,8 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Plans } from 'src/enums/plans.enum';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { PlansGuard } from 'src/guards/plans.guard';
 import { CreateMemberDto, UpdateMemberDto } from './memberstack.dto';
 import { MemberstackService } from './memberstack.service';
-import { AuthenticationGuard } from 'src/guards/auth.guard';
 
 @ApiTags('Memberstack')
 @Controller('/api/memberstack')
@@ -10,7 +12,7 @@ export class MemberstackController {
   constructor(private readonly service: MemberstackService) { }
 
   @Get()
-  @UseGuards(AuthenticationGuard)
+  @UseGuards(AuthGuard, new PlansGuard([Plans.ADMIN, Plans.PROVIDER]))
   @ApiOperation({ summary: 'Get all Members' })
   async getAll() {
     return this.service.getAll();
@@ -46,11 +48,5 @@ export class MemberstackController {
   @ApiOperation({ summary: `Decode a Member's token` })
   decode(@Body('token') token: string) {
     return this.service.decode(token);
-  }
-
-  @Post('/verify')
-  @ApiOperation({ summary: `Verify a Member's token` })
-  verify(@Body('token') token: string) {
-    return this.service.verify(token);
   }
 }
