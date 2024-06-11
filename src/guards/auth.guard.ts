@@ -8,7 +8,7 @@ export class AuthenticationGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authorization = request.headers['authorization'];
+    const authorization = request.headers['authorization'] as string;
 
     if (!authorization)
       throw new UnauthorizedException('Authorization header missing');
