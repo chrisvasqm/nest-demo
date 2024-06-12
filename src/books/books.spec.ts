@@ -49,7 +49,10 @@ describe('Books', () => {
       return request(app.getHttpServer())
         .get('/api/books')
         .expect(200)
-        .expect(response => expect(response.body).toBeInstanceOf(Array));
+        .expect(response => {
+          expect(response.body).toBeInstanceOf(Array);
+          expect(response.body.length).toBe(0);
+        });
     })
   })
 })
