@@ -11,6 +11,18 @@ services:
     volumes:
       - database_data:/var/lib/postgresql/data
 
+  test-database:
+    image: postgres:16.3-alpine3.20
+    container_name: test-database
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_DB: test-nest-demo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - test_database_data:/var/lib/postgresql/data
+
   # backend:
   #   build: .
   #   container_name: backend
@@ -23,3 +35,4 @@ services:
 
 volumes:
   database_data:
+  test_database_data:
