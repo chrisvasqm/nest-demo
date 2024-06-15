@@ -66,7 +66,7 @@ describe('Books', () => {
       expect(response.body.length).toBe(2);
     });
 
-    it('should return a single Book by their id', async () => {
+    it('should return a single Book by their id given it exists', async () => {
       const book = { name: 'book', genre: 'genre' };
       await request(app.getHttpServer())
         .post('/api/books')
