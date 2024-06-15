@@ -2,7 +2,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
-import { Repository } from 'typeorm';
+import { Repository, RepositoryNotTreeError } from 'typeorm';
 import { Book } from './books.entity';
 import { BooksModule } from './books.module';
 
@@ -151,5 +151,20 @@ describe('Books', () => {
         expect(response.status).toBe(400);
       });
     })
+  });
+
+  describe('DELETE', () => {
+    it('should delete an existing Book', async () => {
+      const book = { name: 'book', genre: 'genre' };
+      await request(app.getHttpServer())
+        .post('/api/books')
+        .send(book);
+
+      const response = await request(app.getHttpServer())
+        .delete('/api/books/1');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toMatchObject(book);
+    });
   })
 });
