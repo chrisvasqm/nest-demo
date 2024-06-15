@@ -86,6 +86,24 @@ describe('Books', () => {
 
       expect(response.status).toBe(404);
     });
+
+    it('should return Books filtered by their genre', async () => {
+      const book = { name: 'book1', genre: 'genre1' };
+      await request(app.getHttpServer())
+        .post('/api/books')
+        .send(book);
+
+      await request(app.getHttpServer())
+        .post('/api/books')
+        .send({ name: 'book2', genre: 'genre2' });
+
+      const response = await request(app.getHttpServer())
+        .get('/api/books?genre=genre1');
+
+      expect(response.status).toBe(200);
+      expect(response.body.length).toBe(1);
+      expect(response.body[0]).toMatchObject(book);
+    })
   });
 
   describe('POST', () => {
