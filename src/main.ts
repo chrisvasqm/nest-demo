@@ -1,10 +1,9 @@
-import 'dotenv/config';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
-import { ServerExceptionsFilter } from './filters/serverexceptions.filter';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import 'dotenv/config';
+import helmet from 'helmet';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,15 +11,7 @@ async function bootstrap() {
   app.enableCors();
   app.use(helmet());
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, // Strips properties that do not have any decorators
-      forbidNonWhitelisted: true, // Throws an error if non-whitelisted properties are found
-      transform: true, // Automatically transforms payloads to be objects typed according to their DTO classes
-    }),
-  );
-
-  app.useGlobalFilters(new ServerExceptionsFilter());
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('Nest Demo API')
