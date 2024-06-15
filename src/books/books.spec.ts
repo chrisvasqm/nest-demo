@@ -64,6 +64,19 @@ describe('Books', () => {
       expect(response.status).toBe(200);
       expect(response.body).toBeInstanceOf(Array);
       expect(response.body.length).toBe(2);
+    });
+
+    it('should return a single Book by their id', async () => {
+      const book = { name: 'book', genre: 'genre' };
+      await request(app.getHttpServer())
+        .post('/api/books')
+        .send(book);
+
+      const response = await request(app.getHttpServer())
+        .get('/api/books/1');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toMatchObject(book);
     })
   });
 });
