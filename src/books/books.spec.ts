@@ -128,9 +128,28 @@ describe('Books', () => {
       const response = await request(app.getHttpServer())
         .put('/api/books/1')
         .send(book);
-      
+
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject(book);
+    });
+
+    [
+      { name: '', genre: 'genre' },
+      { name: true, genre: 'genre' },
+      { name: 'book', genre: '' },
+      { name: 'book', genre: true },
+    ].forEach(book => {
+      it(`should return a 400 Bad Request with invalid name: ${book.name} or genre: ${book.genre}`, async () => {
+        await request(app.getHttpServer())
+          .post('/api/books')
+          .send({ name: 'book', genre: 'genre' });
+
+        const response = await request(app.getHttpServer())
+          .put('/api/books/1')
+          .send(book);
+
+        expect(response.status).toBe(400);
+      });
     })
   })
 });
