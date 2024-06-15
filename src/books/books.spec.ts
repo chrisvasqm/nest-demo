@@ -117,4 +117,20 @@ describe('Books', () => {
     });
 
   });
+
+  describe('PUT', () => {
+    it('should return an updated Book', async () => {
+      const book = { name: 'updated book', genre: 'updated genre' };
+      await request(app.getHttpServer())
+        .post('/api/books')
+        .send({ name: 'book', genre: 'genre' });
+
+      const response = await request(app.getHttpServer())
+        .put('/api/books/1')
+        .send(book);
+      
+      expect(response.status).toBe(200);
+      expect(response.body).toMatchObject(book);
+    })
+  })
 });
