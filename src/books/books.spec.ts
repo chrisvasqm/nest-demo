@@ -166,5 +166,12 @@ describe('Books', () => {
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject(book);
     });
-  })
+
+    it('should return a 404 Not Found given a Book does not exist', async () => {
+      const response = await request(app.getHttpServer())
+        .delete('/api/books/1');
+
+      expect(response.status).toBe(404);
+    })
+  });
 });
