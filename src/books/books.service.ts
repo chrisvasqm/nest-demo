@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateBookDto, UpdateBookDto } from './books.dto';
 import { Book } from './books.entity';
 
@@ -10,32 +10,39 @@ interface BookQuery {
 
 @Injectable()
 export class BooksService {
-  constructor(@InjectEntityManager() private manager: EntityManager) { }
+  constructor(@InjectRepository(Book) private repository: Repository<Book>) { }
 
   async getAll(query?: BookQuery) {
     if (query && query.genre)
-      return await this.manager.find(Book, { where: { genre: query.genre } });
+      return await this.repository.find({ where: { genre: query.genre } });
 
-    return await this.manager.find(Book);
+    return await this.repository.find();
   }
 
   async find(id: number) {
-    const book = await this.manager.findOne(Book, { where: { id } });
+    const book = await this.repository.findOne({ where: { id } });
     if (!book) throw new NotFoundException();
+
     return book;
   }
 
   async create(book: CreateBookDto) {
-    const newBook = this.manager.create(Book, book);
-    return await this.manager.save(newBook);
+    const newBook = this.repository.create(book);
+
+    return await this.repository.save(newBook);
   }
 
   async update(id: number, book: UpdateBookDto) {
-    await this.manager.update(Book, { id }, book);
-    return await this.find(id);
+    await this.find(id);
+    await this.repository.update({ id }, book);
+
+    return { id, ...book };
   }
 
   async delete(id: number) {
-    await this.manager.delete(Book, { id });
+    const book = await this.find(id);
+    await this.repository.delete({ id });
+
+    return book;
   }
 }
