@@ -86,4 +86,16 @@ describe('Books', () => {
       expect(response.status).toBe(404);
     });
   });
+
+  describe('POST', () => {
+    it('should create a new Book', async () => {
+      const book = { name: 'book', genre: 'genre' };
+      const response = await request(app.getHttpServer())
+        .post('/api/books')
+        .send(book);
+
+      expect(response.status).toBe(201)
+      expect(response.body).toMatchObject(book);
+    });
+  });
 });
