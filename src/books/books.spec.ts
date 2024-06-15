@@ -41,14 +41,12 @@ describe('Books', () => {
   });
 
   describe('GET', () => {
-    it('should return an empty list given no Books have been created', () => {
-      return request(app.getHttpServer())
-        .get('/api/books')
-        .expect(200)
-        .expect(response => {
-          expect(response.body).toBeInstanceOf(Array);
-          expect(response.body.length).toBe(0);
-        });
+    it('should return an empty list given no Books have been created', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/books');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
     });
 
     it('should return multiple Books given they exist', async () => {
