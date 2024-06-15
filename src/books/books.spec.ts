@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
@@ -28,6 +28,7 @@ describe('Books', () => {
     }).compile();
 
     app = module.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
     await app.init();
     repository = app.get<Repository<Book>>(getRepositoryToken(Book));
   });
@@ -97,5 +98,23 @@ describe('Books', () => {
       expect(response.status).toBe(201)
       expect(response.body).toMatchObject(book);
     });
+
+    [
+      { name: '', genre: 'genre' },
+      { name: true, genre: 'genre' },
+      { name: 'book', genre: '' },
+      { name: 'book', genre: true },
+    ].forEach(book => {
+      it(`should return 400 Bad Request given an invalid name: ${book.name} or genre: ${book.genre}`, async () => {
+        const response = await request(app.getHttpServer())
+          .post('/api/books')
+          .send(book);
+
+        console.log(response);
+
+        expect(response.status).toBe(400);
+      });
+    });
+
   });
 });
