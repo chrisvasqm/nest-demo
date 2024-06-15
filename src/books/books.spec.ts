@@ -77,6 +77,13 @@ describe('Books', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject(book);
-    })
+    });
+
+    it('should return 404 Not Found if the given book does not exist', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/books/1');
+
+      expect(response.status).toBe(404);
+    });
   });
 });
