@@ -50,5 +50,22 @@ describe('Books', () => {
           expect(response.body.length).toBe(0);
         });
     });
+
+    it('should return multiple Books given they exist', async () => {
+      await request(app.getHttpServer())
+        .post('/api/books')
+        .send({ name: 'book1', genre: 'genre1' });
+
+      await request(app.getHttpServer())
+        .post('/api/books')
+        .send({ name: 'book2', genre: 'genre2' });
+
+      const response = await request(app.getHttpServer())
+        .get('/api/books');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body.length).toBe(2);
+    })
   });
 });
