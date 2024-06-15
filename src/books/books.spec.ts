@@ -1,14 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { getEntityManagerToken, TypeOrmModule } from '@nestjs/typeorm';
+import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
-import { EntityManager } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Book } from './books.entity';
 import { BooksModule } from './books.module';
 
 describe('Books', () => {
   let app: INestApplication;
-  let manager: EntityManager;
+  let repository: Repository<Book>;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -29,7 +29,7 @@ describe('Books', () => {
 
     app = module.createNestApplication();
     await app.init();
-    manager = app.get<EntityManager>(getEntityManagerToken());
+    repository = app.get<Repository<Book>>(getRepositoryToken(Book));
   });
 
   afterAll(async () => {
@@ -37,12 +37,8 @@ describe('Books', () => {
   });
 
   afterEach(async () => {
-    const entities = manager.connection.entityMetadatas;
-    for (const entity of entities) {
-      const repository = manager.getRepository(entity.name);
-      await repository.query(`TRUNCATE TABLE "${entity.tableName}" RESTART IDENTITY CASCADE;`);
-    }
-  })
+    await repository.query(`TRUNCATE TABLE "book" RESTART IDENTITY CASCADE;`);
+  });
 
   describe('GET', () => {
     it('should return an empty list given no Books have been created', () => {
@@ -53,6 +49,6 @@ describe('Books', () => {
           expect(response.body).toBeInstanceOf(Array);
           expect(response.body.length).toBe(0);
         });
-    })
-  })
-})
+    });
+  });
+});
