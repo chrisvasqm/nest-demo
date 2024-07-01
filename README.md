@@ -35,7 +35,7 @@ $ pnpm dev
 $ pnpm prod
 ```
 
-## Running the Integration Tests
+## Running the Integration Tests 🧪
 
 After you have spin up the test database using Docker, execute the following command:
 
